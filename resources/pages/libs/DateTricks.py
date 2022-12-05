@@ -5,11 +5,11 @@ class DateTricks():
         today = date.today()
 
         # mm/dd/yyyy
-        fdate = today.strftime('%m%d%Y')
+        fdate = today.strftime('%d%m%y')
 
         print(fdate)
 
-        a_chars = ['1','1','1','7','2']
+        a_chars = []
 
         for number in fdate:
             a_chars.append(number)

@@ -1,0 +1,390 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<robot generator="Robot 6.0 (Python 3.10.8 on win32)" generated="20221205 00:30:59.490" rpa="false" schemaversion="3">
+<suite id="s1" name="Enrolls" source="C:\SmartBit\web\tests\enrolls.robot">
+<test id="s1-t1" name="Deve matricular um aluno" line="7">
+<kw name="Get Fixture" library="base">
+<var>${admin}</var>
+<arg>admin</arg>
+<kw name="Load Json From File" library="JSONLibrary">
+<var>${fixture}</var>
+<arg>${EXECDIR}/resources/fixtures/${fixture_file}.json</arg>
+<arg>encoding=UTF-8</arg>
+<doc>Load JSON from file.</doc>
+<msg timestamp="20221205 00:31:02.001" level="INFO">${fixture} = {'name': 'Admin', 'email': 'admin@smartbit.com', 'pass': 'qacademy'}</msg>
+<status status="PASS" starttime="20221205 00:31:01.998" endtime="20221205 00:31:02.001"/>
+</kw>
+<msg timestamp="20221205 00:31:02.002" level="INFO">${admin} = {'name': 'Admin', 'email': 'admin@smartbit.com', 'pass': 'qacademy'}</msg>
+<status status="PASS" starttime="20221205 00:31:01.994" endtime="20221205 00:31:02.002"/>
+</kw>
+<kw name="Get Fixture" library="base">
+<var>${student}</var>
+<arg>student</arg>
+<kw name="Load Json From File" library="JSONLibrary">
+<var>${fixture}</var>
+<arg>${EXECDIR}/resources/fixtures/${fixture_file}.json</arg>
+<arg>encoding=UTF-8</arg>
+<doc>Load JSON from file.</doc>
+<msg timestamp="20221205 00:31:02.088" level="INFO">${fixture} = {'name': 'Falcão', 'email': 'falcao@gmail.com', 'enroll': {'plan': 'Smart'}}</msg>
+<status status="PASS" starttime="20221205 00:31:02.083" endtime="20221205 00:31:02.088"/>
+</kw>
+<msg timestamp="20221205 00:31:02.091" level="INFO">${student} = {'name': 'Falcão', 'email': 'falcao@gmail.com', 'enroll': {'plan': 'Smart'}}</msg>
+<status status="PASS" starttime="20221205 00:31:02.080" endtime="20221205 00:31:02.091"/>
+</kw>
+<kw name="Reset Student Enroll" library="database">
+<arg>${student}[email]</arg>
+<kw name="Connect to Postgres" library="database">
+<kw name="Connect To Database" library="DatabaseLibrary">
+<arg>psycopg2</arg>
+<arg>naunxhtf</arg>
+<arg>naunxhtf</arg>
+<arg>r3qZKZU5OD6GAuIMjIvQR6gUwdQDlbUU</arg>
+<arg>babar.db.elephantsql.com</arg>
+<arg>5432</arg>
+<doc>Loads the DB API 2.0 module given `dbapiModuleName` then uses it to
+connect to the database using `dbName`, `dbUsername`, and `dbPassword`.</doc>
+<msg timestamp="20221205 00:31:02.391" level="INFO">Connecting using : psycopg2.connect(database=naunxhtf, user=naunxhtf, password=r3qZKZU5OD6GAuIMjIvQR6gUwdQDlbUU, host=babar.db.elephantsql.com, port=5432) </msg>
+<status status="PASS" starttime="20221205 00:31:02.201" endtime="20221205 00:31:02.744"/>
+</kw>
+<status status="PASS" starttime="20221205 00:31:02.200" endtime="20221205 00:31:02.745"/>
+</kw>
+<kw name="Delete Enroll By Email" library="database">
+<arg>${email}</arg>
+<kw name="Select Student Where Email" library="database">
+<var>${user}</var>
+<arg>${email}</arg>
+<kw name="Set Variable" library="BuiltIn">
+<var>${query}</var>
+<arg>SELECT * FROM "public"."students" where email = '${email}';</arg>
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<msg timestamp="20221205 00:31:02.749" level="INFO">${query} = SELECT * FROM "public"."students" where email = 'falcao@gmail.com';</msg>
+<status status="PASS" starttime="20221205 00:31:02.749" endtime="20221205 00:31:02.749"/>
+</kw>
+<kw name="Query" library="DatabaseLibrary">
+<var>${result}</var>
+<arg>${query}</arg>
+<doc>Uses the input `selectStatement` to query for the values that will be returned as a list of tuples. Set optional
+input `sansTran` to True to run command without an explicit transaction commit or rollback.
+Set optional input `returnAsDict` to True to return values as a list of dictionaries.</doc>
+<msg timestamp="20221205 00:31:02.750" level="INFO">Executing : Query  |  SELECT * FROM "public"."students" where email = 'falcao@gmail.com'; </msg>
+<msg timestamp="20221205 00:31:02.799" level="INFO">${result} = [(1, 'falcao@gmail.com', 'Falcão', 30, Decimal('81.00'), Decimal('1.74'), datetime.datetime(2022, 11, 1, 22, 30, 9, 320000, tzinfo=datetime.timezone.utc), datetime.datetime(2022, 11, 1, 22, 30, 9, 320...</msg>
+<status status="PASS" starttime="20221205 00:31:02.750" endtime="20221205 00:31:02.799"/>
+</kw>
+<msg timestamp="20221205 00:31:02.800" level="INFO">${user} = (1, 'falcao@gmail.com', 'Falcão', 30, Decimal('81.00'), Decimal('1.74'), datetime.datetime(2022, 11, 1, 22, 30, 9, 320000, tzinfo=datetime.timezone.utc), datetime.datetime(2022, 11, 1, 22, 30, 9, 3200...</msg>
+<status status="PASS" starttime="20221205 00:31:02.747" endtime="20221205 00:31:02.800"/>
+</kw>
+<kw name="Set Variable" library="BuiltIn">
+<var>${query}</var>
+<arg>DELETE FROM public.enrollments where student_id='${user}[0]';</arg>
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<msg timestamp="20221205 00:31:02.800" level="INFO">${query} = DELETE FROM public.enrollments where student_id='1';</msg>
+<status status="PASS" starttime="20221205 00:31:02.800" endtime="20221205 00:31:02.800"/>
+</kw>
+<kw name="Execute Sql String" library="DatabaseLibrary">
+<arg>${query}</arg>
+<doc>Executes the sqlString as SQL commands. Useful to pass arguments to your sql. Set optional input `sansTran` to
+True to run command without an explicit transaction commit or rollback.</doc>
+<msg timestamp="20221205 00:31:02.801" level="INFO">Executing : Execute SQL String  |  DELETE FROM public.enrollments where student_id='1'; </msg>
+<status status="PASS" starttime="20221205 00:31:02.801" endtime="20221205 00:31:02.846"/>
+</kw>
+<status status="PASS" starttime="20221205 00:31:02.746" endtime="20221205 00:31:02.847"/>
+</kw>
+<kw name="Disconnect From Database" library="DatabaseLibrary">
+<doc>Disconnects from the database.</doc>
+<msg timestamp="20221205 00:31:02.848" level="INFO">Executing : Disconnect From Database</msg>
+<status status="PASS" starttime="20221205 00:31:02.848" endtime="20221205 00:31:02.848"/>
+</kw>
+<status status="PASS" starttime="20221205 00:31:02.198" endtime="20221205 00:31:02.849"/>
+</kw>
+<kw name="Do Login" library="base">
+<arg>${admin}</arg>
+<kw name=" Go To Login Page" library="login">
+<kw name="New Browser" library="Browser">
+<arg>headless=false</arg>
+<arg>browser=chromium</arg>
+<tag>BrowserControl</tag>
+<tag>Setter</tag>
+<doc>Create a new playwright Browser with specified options.</doc>
+<msg timestamp="20221205 00:31:02.852" level="INFO">{"browser": "chromium", "headless": false, "devtools": false, "handleSIGHUP": true, "handleSIGINT": true, "handleSIGTERM": true, "slowMo": 0.0, "timeout": 30000.0, "deprecated_pos_args": [], "tracesDir": "C:\\SmartBit\\web\\logs\\browser\\traces\\8c2a0bd1-90f5-4729-bf06-88d756b8f2b1"}</msg>
+<msg timestamp="20221205 00:31:04.555" level="INFO">Successfully created browser with options: {"browser":"chromium","headless":false,"devtools":false,"handleSIGHUP":true,"handleSIGINT":true,"handleSIGTERM":true,"slowMo":0,"timeout":30000,"deprecated_pos_args":[],"tracesDir":"C:\\SmartBit\\web\\logs\\browser\\traces\\8c2a0bd1-90f5-4729-bf06-88d756b8f2b1"}</msg>
+<status status="PASS" starttime="20221205 00:31:02.851" endtime="20221205 00:31:04.555"/>
+</kw>
+<kw name="New Page" library="Browser">
+<arg>http://localhost:3000</arg>
+<tag>BrowserControl</tag>
+<tag>Setter</tag>
+<doc>Open a new Page.</doc>
+<msg timestamp="20221205 00:31:06.482" level="INFO">Successfully initialized new page object and opened url: http://localhost:3000</msg>
+<msg timestamp="20221205 00:31:06.484" level="INFO">No context was open. New context was automatically opened when this page is created.</msg>
+<status status="PASS" starttime="20221205 00:31:04.556" endtime="20221205 00:31:06.485"/>
+</kw>
+<status status="PASS" starttime="20221205 00:31:02.851" endtime="20221205 00:31:06.488"/>
+</kw>
+<kw name="Fill Credenciais" library="login">
+<arg>${user}[email]</arg>
+<arg>${user}[pass]</arg>
+<kw name="Fill Text" library="Browser">
+<arg>css=input[name=email]</arg>
+<arg>${email}</arg>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+<doc>Clears and fills the given ``txt`` into the text field found by ``selector``.</doc>
+<msg timestamp="20221205 00:31:06.516" level="INFO">Fills the text 'admin@smartbit.com' in the given field.</msg>
+<status status="PASS" starttime="20221205 00:31:06.506" endtime="20221205 00:31:06.655"/>
+</kw>
+<kw name="Fill Text" library="Browser">
+<arg>css=input[name=password]</arg>
+<arg>${pass}</arg>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+<doc>Clears and fills the given ``txt`` into the text field found by ``selector``.</doc>
+<msg timestamp="20221205 00:31:06.656" level="INFO">Fills the text 'qacademy' in the given field.</msg>
+<status status="PASS" starttime="20221205 00:31:06.655" endtime="20221205 00:31:06.702"/>
+</kw>
+<status status="PASS" starttime="20221205 00:31:06.489" endtime="20221205 00:31:06.702"/>
+</kw>
+<kw name="Submit Credenciais" library="login">
+<kw name="Click" library="Browser">
+<arg>css=button &gt;&gt; text=Entrar no sistema</arg>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+<doc>Simulates mouse click on the element found by ``selector``.</doc>
+<status status="PASS" starttime="20221205 00:31:06.704" endtime="20221205 00:31:06.829"/>
+</kw>
+<status status="PASS" starttime="20221205 00:31:06.702" endtime="20221205 00:31:06.830"/>
+</kw>
+<kw name="User Should Be Looged In" library="navbar">
+<arg>${user}[name]</arg>
+<kw name="Set Variable" library="BuiltIn">
+<var>${logged_user}</var>
+<arg>css=aside strong</arg>
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<msg timestamp="20221205 00:31:06.833" level="INFO">${logged_user} = css=aside strong</msg>
+<status status="PASS" starttime="20221205 00:31:06.832" endtime="20221205 00:31:06.833"/>
+</kw>
+<kw name="Wait For Elements State" library="Browser">
+<arg>${logged_user}</arg>
+<arg>visible</arg>
+<arg>10</arg>
+<tag>PageContent</tag>
+<tag>Wait</tag>
+<doc>Waits for the element found by ``selector`` to satisfy state option.</doc>
+<msg timestamp="20221205 00:31:07.079" level="INFO">Waited for Element with selector css=aside strong at state visible</msg>
+<status status="PASS" starttime="20221205 00:31:06.834" endtime="20221205 00:31:07.080"/>
+</kw>
+<kw name="Get Text" library="Browser">
+<arg>${logged_user}</arg>
+<arg>equal</arg>
+<arg>${user_name}</arg>
+<tag>Assertion</tag>
+<tag>Getter</tag>
+<tag>PageContent</tag>
+<doc>Returns text attribute of the element found by ``selector``.</doc>
+<status status="PASS" starttime="20221205 00:31:07.081" endtime="20221205 00:31:07.227"/>
+</kw>
+<status status="PASS" starttime="20221205 00:31:06.831" endtime="20221205 00:31:07.229"/>
+</kw>
+<status status="PASS" starttime="20221205 00:31:02.850" endtime="20221205 00:31:07.230"/>
+</kw>
+<kw name="Go To Enrolls" library="enroll">
+<kw name="Click" library="Browser">
+<arg>css=a[href="/matriculas"]</arg>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+<doc>Simulates mouse click on the element found by ``selector``.</doc>
+<status status="PASS" starttime="20221205 00:31:07.234" endtime="20221205 00:31:07.405"/>
+</kw>
+<status status="PASS" starttime="20221205 00:31:07.233" endtime="20221205 00:31:07.406"/>
+</kw>
+<kw name="Go To Enroll Form" library="enroll">
+<kw name="Click" library="Browser">
+<arg>css=a[href="/matriculas/new"]</arg>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+<doc>Simulates mouse click on the element found by ``selector``.</doc>
+<status status="PASS" starttime="20221205 00:31:07.409" endtime="20221205 00:31:07.665"/>
+</kw>
+<status status="PASS" starttime="20221205 00:31:07.408" endtime="20221205 00:31:07.666"/>
+</kw>
+<kw name="Select Student" library="enroll">
+<arg>${student}[name]</arg>
+<kw name="Fill Text" library="Browser">
+<arg>xpath=//div[contains(text(), "nome do aluno")]/..//input</arg>
+<arg>${student_name}</arg>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+<doc>Clears and fills the given ``txt`` into the text field found by ``selector``.</doc>
+<msg timestamp="20221205 00:31:07.669" level="INFO">Fills the text 'Falcão' in the given field.</msg>
+<status status="PASS" starttime="20221205 00:31:07.669" endtime="20221205 00:31:07.826"/>
+</kw>
+<kw name="Click" library="Browser">
+<arg>css=div[class$=option] &gt;&gt; text=${student_name}</arg>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+<doc>Simulates mouse click on the element found by ``selector``.</doc>
+<status status="PASS" starttime="20221205 00:31:07.826" endtime="20221205 00:31:08.004"/>
+</kw>
+<status status="PASS" starttime="20221205 00:31:07.668" endtime="20221205 00:31:08.004"/>
+</kw>
+<kw name="Select Plan" library="enroll">
+<arg>${student}[enroll][plan]</arg>
+<kw name="Click" library="Browser">
+<arg>xpath=//label[text()="PLANO"]/..//div[contains(text(), "Selecione")]</arg>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+<doc>Simulates mouse click on the element found by ``selector``.</doc>
+<status status="PASS" starttime="20221205 00:31:08.006" endtime="20221205 00:31:08.115"/>
+</kw>
+<kw name="Click" library="Browser">
+<arg>css=div[class$=option] &gt;&gt; text=${plan_name}</arg>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+<doc>Simulates mouse click on the element found by ``selector``.</doc>
+<status status="PASS" starttime="20221205 00:31:08.117" endtime="20221205 00:31:08.206"/>
+</kw>
+<status status="PASS" starttime="20221205 00:31:08.005" endtime="20221205 00:31:08.207"/>
+</kw>
+<kw name="Fill Start Date" library="enroll">
+<kw name="Focus" library="Browser">
+<arg>css=input[name=start_date]</arg>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+<doc>Moves focus on to the element found by ``selector``.</doc>
+<status status="PASS" starttime="20221205 00:31:08.208" endtime="20221205 00:31:08.258"/>
+</kw>
+<kw name="Get Start Date" library="DateTricks">
+<var>${start_date}</var>
+<msg timestamp="20221205 00:31:08.260" level="INFO">051222</msg>
+<msg timestamp="20221205 00:31:08.260" level="INFO">${start_date} = ['0', '5', '1', '2', '2', '2']</msg>
+<status status="PASS" starttime="20221205 00:31:08.258" endtime="20221205 00:31:08.260"/>
+</kw>
+<for flavor="IN">
+<var>${number}</var>
+<value>@{start_date}</value>
+<iter>
+<var name="${number}">0</var>
+<kw name="Keyboard Key" library="Browser">
+<arg>press</arg>
+<arg>${number}</arg>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+<doc>Press a keyboard key on the virtual keyboard or set a key up or down.</doc>
+<status status="PASS" starttime="20221205 00:31:08.263" endtime="20221205 00:31:08.288"/>
+</kw>
+<status status="PASS" starttime="20221205 00:31:08.262" endtime="20221205 00:31:08.288"/>
+</iter>
+<iter>
+<var name="${number}">5</var>
+<kw name="Keyboard Key" library="Browser">
+<arg>press</arg>
+<arg>${number}</arg>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+<doc>Press a keyboard key on the virtual keyboard or set a key up or down.</doc>
+<status status="PASS" starttime="20221205 00:31:08.289" endtime="20221205 00:31:08.303"/>
+</kw>
+<status status="PASS" starttime="20221205 00:31:08.289" endtime="20221205 00:31:08.304"/>
+</iter>
+<iter>
+<var name="${number}">1</var>
+<kw name="Keyboard Key" library="Browser">
+<arg>press</arg>
+<arg>${number}</arg>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+<doc>Press a keyboard key on the virtual keyboard or set a key up or down.</doc>
+<status status="PASS" starttime="20221205 00:31:08.305" endtime="20221205 00:31:08.312"/>
+</kw>
+<status status="PASS" starttime="20221205 00:31:08.304" endtime="20221205 00:31:08.312"/>
+</iter>
+<iter>
+<var name="${number}">2</var>
+<kw name="Keyboard Key" library="Browser">
+<arg>press</arg>
+<arg>${number}</arg>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+<doc>Press a keyboard key on the virtual keyboard or set a key up or down.</doc>
+<status status="PASS" starttime="20221205 00:31:08.313" endtime="20221205 00:31:08.329"/>
+</kw>
+<status status="PASS" starttime="20221205 00:31:08.313" endtime="20221205 00:31:08.330"/>
+</iter>
+<iter>
+<var name="${number}">2</var>
+<kw name="Keyboard Key" library="Browser">
+<arg>press</arg>
+<arg>${number}</arg>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+<doc>Press a keyboard key on the virtual keyboard or set a key up or down.</doc>
+<status status="PASS" starttime="20221205 00:31:08.331" endtime="20221205 00:31:08.346"/>
+</kw>
+<status status="PASS" starttime="20221205 00:31:08.330" endtime="20221205 00:31:08.347"/>
+</iter>
+<iter>
+<var name="${number}">2</var>
+<kw name="Keyboard Key" library="Browser">
+<arg>press</arg>
+<arg>${number}</arg>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+<doc>Press a keyboard key on the virtual keyboard or set a key up or down.</doc>
+<status status="PASS" starttime="20221205 00:31:08.350" endtime="20221205 00:31:08.370"/>
+</kw>
+<status status="PASS" starttime="20221205 00:31:08.348" endtime="20221205 00:31:08.370"/>
+</iter>
+<status status="PASS" starttime="20221205 00:31:08.261" endtime="20221205 00:31:08.370"/>
+</for>
+<status status="PASS" starttime="20221205 00:31:08.207" endtime="20221205 00:31:08.371"/>
+</kw>
+<kw name="Submmit Enroll Form" library="enroll">
+<kw name="Click" library="Browser">
+<arg>css=button &gt;&gt; text=Salvar</arg>
+<tag>PageContent</tag>
+<tag>Setter</tag>
+<doc>Simulates mouse click on the element found by ``selector``.</doc>
+<status status="PASS" starttime="20221205 00:31:08.373" endtime="20221205 00:31:08.478"/>
+</kw>
+<status status="PASS" starttime="20221205 00:31:08.372" endtime="20221205 00:31:08.478"/>
+</kw>
+<kw name="Verify Toaster" library="toast">
+<arg>Matrícula cadastrada com sucesso</arg>
+<kw name="Wait For Elements State" library="Browser">
+<arg>css=.Toastify__toast-body div &gt;&gt; text=${expected_message}</arg>
+<arg>visible</arg>
+<arg>10</arg>
+<tag>PageContent</tag>
+<tag>Wait</tag>
+<doc>Waits for the element found by ``selector`` to satisfy state option.</doc>
+<msg timestamp="20221205 00:31:08.791" level="INFO">Waited for Element with selector css=.Toastify__toast-body div &gt;&gt; text=Matrícula cadastrada com sucesso at state visible</msg>
+<status status="PASS" starttime="20221205 00:31:08.480" endtime="20221205 00:31:08.792"/>
+</kw>
+<kw name="Wait For Elements State" library="Browser">
+<arg>css=.Toastify__toast-body div</arg>
+<arg>detached</arg>
+<arg>10</arg>
+<tag>PageContent</tag>
+<tag>Wait</tag>
+<doc>Waits for the element found by ``selector`` to satisfy state option.</doc>
+<msg timestamp="20221205 00:31:15.520" level="INFO">Waited for Element with selector css=.Toastify__toast-body div at state detached</msg>
+<status status="PASS" starttime="20221205 00:31:08.792" endtime="20221205 00:31:15.520"/>
+</kw>
+<status status="PASS" starttime="20221205 00:31:08.479" endtime="20221205 00:31:15.521"/>
+</kw>
+<status status="PASS" starttime="20221205 00:31:01.981" endtime="20221205 00:31:15.521"/>
+</test>
+<doc>Suíte de testes de matrículas de alunos</doc>
+<status status="PASS" starttime="20221205 00:30:59.495" endtime="20221205 00:31:16.104"/>
+</suite>
+<statistics>
+<total>
+<stat pass="1" fail="0" skip="0">All Tests</stat>
+</total>
+<tag>
+</tag>
+<suite>
+<stat pass="1" fail="0" skip="0" id="s1" name="Enrolls">Enrolls</stat>
+</suite>
+</statistics>
+<errors>
+</errors>
+</robot>
